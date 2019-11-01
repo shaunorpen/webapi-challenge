@@ -3,6 +3,21 @@ const actions = require("../../data/helpers/actionModel");
 
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  actions
+    .get()
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch(error => {
+      res.status(500).json({
+        message:
+          "There was a problem retrieving the list of actions from the database: " +
+          error.message
+      });
+    });
+});
+
 router.get("/:id", validateActionId, (req, res) => {
   res.status(200).json(req.action);
 });
