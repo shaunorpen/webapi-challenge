@@ -89,14 +89,14 @@ function validateNewProject(req, res, next) {
 }
 
 function validateUpdatedProject(req, res, next) {
-  const updatedProject = req.body;
-  if (!updatedProject.name && !updatedProject.description) {
+  const project = req.body;
+  if (!project.name && !project.description && !project.completed) {
     res.status(400).json({
       message:
-        "Please ensure the updated project has either an updated name or description."
+        "Please ensure the updated project has either an updated name, description or completed status."
     });
   } else {
-    req.project = updatedProject;
+    req.project = project;
     next();
   }
 }

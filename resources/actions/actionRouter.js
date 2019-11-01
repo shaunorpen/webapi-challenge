@@ -38,22 +38,23 @@ router.put("/:id", validateUpdatedAction, (req, res) => {
 });
 
 router.delete("/:id", validateActionId, (req, res) => {
-  actions.remove(req.action.id)
-  .then(data => {
-    res.status(200).json({
+  actions
+    .remove(req.action.id)
+    .then(data => {
+      res.status(200).json({
         message: `${data} action${
           data === 1 ? " was" : "s were"
         } deleted from the database.`
       });
-  })
-  .catch(error => {
-    res.status(500).json({
-      message:
-        "There was a problem deleting the action from the database: " +
-        error.message
+    })
+    .catch(error => {
+      res.status(500).json({
+        message:
+          "There was a problem deleting the action from the database: " +
+          error.message
+      });
     });
-  })
-})
+});
 
 function validateActionId(req, res, next) {
   actions
@@ -90,10 +91,15 @@ function validateNewAction(req, res, next) {
 
 function validateUpdatedAction(req, res, next) {
   const action = req.body;
-  if (!action.project_id && !action.description && !action.notes) {
+  if (
+    !action.project_id &&
+    !action.description &&
+    !action.notes &&
+    !action.completed
+  ) {
     res.status(400).json({
       message:
-        "Please ensure the updated action has either a new project_id, description  or notes."
+        "Please ensure the updated action has either a new project_id, description, notes or completed status."
     });
   } else {
     req.action = action;
